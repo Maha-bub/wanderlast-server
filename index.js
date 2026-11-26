@@ -18,12 +18,14 @@ export async function connectToMongoDB() {
         console.dir(err);
     }
 }
-connectToMongoDB()
+const mongodbClient = await connectToMongoDB()
+const db = mongodbClient.db('wanderlast');
+const destinationCollection = db.collection('destination')
 
-app.post('/add-destination', (req, res) => {
+app.post('/add-destination', async (req, res) => {
     const travelPackage = req.body;
-
-    console.log(travelPackage);
+    const result = await destinationCollection.insertOne(travelPackage)
+    console.log(result);
     res.send(travelPackage);
 
 })
